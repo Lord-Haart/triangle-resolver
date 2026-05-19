@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Triangle Resolver - Sides, Angles, Altitudes and Foot Points</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/ubuntu@5.2.8/400.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Triangle Resolver</h1>
+            <p>Calculate sides, angles, altitudes, and foot point segments | SVG Vector Graphics</p>
+        </header>
+
+        <main class="content">
+            <section class="input-panel" aria-label="Triangle side and angle inputs and controls">
+                <div class="input-mode-tabs" aria-label="Triangle input modes">
+                    <button id="sssModeButton" class="input-mode-button active" type="button" data-input-mode="sss">SSS</button>
+                    <button id="sasModeButton" class="input-mode-button" type="button" data-input-mode="sas">SAS</button>
+                    <button id="asaModeButton" class="input-mode-button" type="button" data-input-mode="asa">ASA</button>
+                    <button id="aasModeButton" class="input-mode-button" type="button" data-input-mode="aas">AAS</button>
+                    <button id="ssaModeButton" class="input-mode-button" type="button" data-input-mode="ssa">SSA</button>
+                </div>
+
+                <div id="sssInputPanel" class="input-mode-panel" data-input-mode-panel="sss">
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label for="sssSideA">Side a (BC)</label>
+                            <input type="number" id="sssSideA" step="any" min="0" value="3">
+                        </div>
+                        <div class="input-group">
+                            <label for="sssSideB">Side b (AC)</label>
+                            <input type="number" id="sssSideB" step="any" min="0" value="4">
+                        </div>
+                        <div class="input-group">
+                            <label for="sssSideC">Side c (AB)</label>
+                            <input type="number" id="sssSideC" step="any" min="0" value="5">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="sasInputPanel" class="input-mode-panel" data-input-mode-panel="sas" hidden>
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label for="sasSideB">Side b (AC)</label>
+                            <input type="number" id="sasSideB" step="any" min="0" value="4">
+                        </div>
+                        <div class="input-group">
+                            <label for="sasSideC">Side c (AB)</label>
+                            <input type="number" id="sasSideC" step="any" min="0" value="3">
+                        </div>
+                        <div class="input-group">
+                            <label for="sasAngleA">Angle A (deg)</label>
+                            <input type="number" id="sasAngleA" step="any" min="0" max="180" value="90">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="asaInputPanel" class="input-mode-panel" data-input-mode-panel="asa" hidden>
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label for="asaAngleA">Angle A (deg)</label>
+                            <input type="number" id="asaAngleA" step="any" min="0" max="180" value="30">
+                        </div>
+                        <div class="input-group">
+                            <label for="asaSideC">Side c (AB)</label>
+                            <input type="number" id="asaSideC" step="any" min="0" value="10">
+                        </div>
+                        <div class="input-group">
+                            <label for="asaAngleB">Angle B (deg)</label>
+                            <input type="number" id="asaAngleB" step="any" min="0" max="180" value="60">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="aasInputPanel" class="input-mode-panel" data-input-mode-panel="aas" hidden>
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label for="aasAngleA">Angle A (deg)</label>
+                            <input type="number" id="aasAngleA" step="any" min="0" max="180" value="30">
+                        </div>
+                        <div class="input-group">
+                            <label for="aasAngleB">Angle B (deg)</label>
+                            <input type="number" id="aasAngleB" step="any" min="0" max="180" value="60">
+                        </div>
+                        <div class="input-group">
+                            <label for="aasSideA">Side a (BC)</label>
+                            <input type="number" id="aasSideA" step="any" min="0" value="10">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="ssaInputPanel" class="input-mode-panel" data-input-mode-panel="ssa" hidden>
+                    <div class="input-grid">
+                        <div class="input-group">
+                            <label for="ssaAngleA">Angle A (deg)</label>
+                            <input type="number" id="ssaAngleA" step="any" min="0" max="180" value="30">
+                        </div>
+                        <div class="input-group">
+                            <label for="ssaSideA">Side a (BC)</label>
+                            <input type="number" id="ssaSideA" step="any" min="0" value="5">
+                        </div>
+                        <div class="input-group">
+                            <label for="ssaSideB">Side b (AC)</label>
+                            <input type="number" id="ssaSideB" step="any" min="0" value="8">
+                        </div>
+                    </div>
+                </div>
+
+                <button id="calculateButton" type="button">Calculate & Draw</button>
+
+                <div class="controls" aria-label="View controls">
+                    <button id="resetViewButton" type="button">Reset View</button>
+                    <button id="fitToScreenButton" type="button">Fit to Screen</button>
+                </div>
+
+                <div class="controls export-controls" aria-label="Export controls">
+                    <button id="downloadSvgButton" type="button">Export SVG</button>
+                    <button id="downloadPngButton" type="button">Export PNG</button>
+                    <button id="downloadTxtButton" type="button">Export TXT</button>
+                    <button id="downloadCsvButton" type="button">Export CSV</button>
+                </div>
+
+                <div class="options">
+                    <div class="preset-controls" aria-label="Display presets">
+                        <button id="constructionPresetButton" class="preset-button active" type="button">Construction</button>
+                        <button id="measurementPresetButton" class="preset-button" type="button">Measurement</button>
+                        <button id="presentationPresetButton" class="preset-button" type="button">Presentation</button>
+                    </div>
+                    <button id="resetDisplayPreferencesButton" class="display-reset-button" type="button">Reset Display Preferences</button>
+                    <div id="displayPreferencesStatus" class="display-preferences-status" aria-live="polite"></div>
+
+                    <label class="checkbox-row" for="showAxes">
+                        <input type="checkbox" id="showAxes" checked>
+                        <span>Axes</span>
+                    </label>
+                    <label class="checkbox-row" for="showAltitudes">
+                        <input type="checkbox" id="showAltitudes" checked>
+                        <span>Altitudes</span>
+                    </label>
+                    <label class="checkbox-row" for="showFootLabels">
+                        <input type="checkbox" id="showFootLabels" checked>
+                        <span>Foot labels</span>
+                    </label>
+                    <label class="checkbox-row" for="showSegmentLengths">
+                        <input type="checkbox" id="showSegmentLengths" checked>
+                        <span>Segment lengths</span>
+                    </label>
+                    <label class="checkbox-row" for="showTriangleFill">
+                        <input type="checkbox" id="showTriangleFill" checked>
+                        <span>Triangle fill</span>
+                    </label>
+                    <label class="checkbox-row" for="showVertexLabels">
+                        <input type="checkbox" id="showVertexLabels" checked>
+                        <span>Vertex labels</span>
+                    </label>
+                    <label class="checkbox-row" for="showExtensionLines">
+                        <input type="checkbox" id="showExtensionLines" checked>
+                        <span>Extension lines</span>
+                    </label>
+                    <label class="checkbox-row" for="includeExportMetadata">
+                        <input type="checkbox" id="includeExportMetadata">
+                        <span>Export metadata</span>
+                    </label>
+                </div>
+
+                <div id="errorMessage" class="error-message" role="alert"></div>
+            </section>
+
+            <section class="canvas-panel" aria-label="Triangle SVG diagram">
+                <div id="solutionTabs" class="solution-tabs" aria-label="Triangle solution choices" hidden></div>
+
+                <div class="canvas-wrapper">
+                    <svg id="triangleSVG" role="img" aria-label="Triangle diagram"></svg>
+
+                    <div class="zoom-controls" aria-label="SVG zoom controls">
+                        <button id="zoomInButton" type="button" aria-label="Zoom in" title="Zoom in">+</button>
+                        <button id="zoomOutButton" type="button" aria-label="Zoom out" title="Zoom out">-</button>
+                        <button id="fitViewButton" class="reset-view-button" type="button" aria-label="Fit view" title="Fit view">Fit</button>
+                    </div>
+
+                    <div class="rotation-controls" aria-label="SVG rotation controls">
+                        <button id="rotateLeftButton" type="button" aria-label="Rotate left to previous side" title="Rotate left">↶</button>
+                        <button id="rotateRightButton" type="button" aria-label="Rotate right to next side" title="Rotate right">↷</button>
+                    </div>
+                </div>
+
+                <div class="canvas-hint">
+                    Drag to pan | Scroll to zoom | Rotate aligns a, b, or c with the X-axis
+                </div>
+            </section>
+
+            <section class="results-panel" id="results" aria-live="polite" aria-label="Triangle calculation results">
+                <div class="loading-state">Loading...</div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <span>&copy; 2026 Triangle Resolver. All rights reserved.</span>
+            <span>Engineering geometry reference tool | SVG, PNG, TXT, and CSV exports | Client-side calculations</span>
+        </footer>
+    </div>
+</body>
+</html>
